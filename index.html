@@ -11,10 +11,14 @@
     <div id="app">
       <!-- ===== Camera / Collect ===== -->
       <section id="screen-camera" class="screen active">
-        <div class="app-title">dropalete</div>
+        <div class="app-title">dropalette</div>
         <div class="stage">
           <video id="video" playsinline autoplay muted></video>
           <div id="grid" class="grid"></div>
+          <div id="cam-prompt" class="cam-prompt">
+            <p id="cam-msg" class="cam-msg">Camera access is needed to sample colors from a live view.</p>
+            <button id="enable-cam" class="btn primary">Enable camera</button>
+          </div>
           <div id="toast"></div>
         </div>
         <div class="controls">

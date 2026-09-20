@@ -28,7 +28,9 @@ html, body {
 #app {
   max-width: 480px;
   margin: 0 auto;
-  height: 100dvh;
+  width: 100%;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* fills the visible viewport on mobile */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -120,6 +122,31 @@ html, body {
 /* selecting mode: filled cells invite a tap */
 .grid.selecting .cell.filled { cursor: pointer; }
 .grid.selecting .cell:not(.filled) { opacity: 0.5; pointer-events: none; }
+
+/* ---------- Camera enable prompt ---------- */
+.cam-prompt {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(2px);
+}
+.cam-prompt.hidden { display: none; }
+.cam-msg {
+  margin: 0;
+  max-width: 260px;
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.cam-prompt .btn { flex: 0 0 auto; min-width: 180px; }
 
 /* ---------- Toast / hex readout ---------- */
 #toast {

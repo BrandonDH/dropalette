@@ -40,10 +40,26 @@ async function startCamera() {
     video.classList.toggle("mirrored", state.facingMode === "user");
     await video.play();
     state.streaming = true;
+    hideCamPrompt();
   } catch (err) {
-    showToast("Camera unavailable — " + (err && err.name ? err.name : "error"));
+    state.streaming = false;
+    const name = err && err.name ? err.name : "error";
+    const msg = name === "NotAllowedError"
+      ? "Camera access was blocked. Allow it for this site in your browser, then tap to try again."
+      : "Couldn't start the camera. Tap to try again.";
+    showCamPrompt(msg);
     console.error("getUserMedia failed:", err);
   }
+}
+
+function showCamPrompt(msg) {
+  const p = el("cam-prompt");
+  if (msg) el("cam-msg").textContent = msg;
+  p.classList.remove("hidden");
+}
+
+function hideCamPrompt() {
+  el("cam-prompt").classList.add("hidden");
 }
 
 function stopCamera() {
@@ -68,7 +84,7 @@ function buildGrid() {
     c.className = "cell";
     c.dataset.index = i;
     c.setAttribute("aria-label", "grid cell " + (i + 1));
-    c.addEventListener("click", () => onCellTap(i, c));
+    c.addEventListener("click", (e) => onCellTap(i, e));
     gridEl.appendChild(c);
   });
   renderCells();
@@ -86,7 +102,7 @@ function renderCells() {
   updateControls();
 }
 
-function onCellTap(i, node) {
+function onCellTap(i, ev) {
   const cell = state.cells[i];
   if (state.selecting) {
     if (!cell.color) return;
@@ -95,23 +111,22 @@ function onCellTap(i, node) {
     return;
   }
   if (cell.color) return; // already collected — tap again in Select mode to pick it
-  const hex = samplePixel(node);
+  const hex = samplePixel(ev.clientX, ev.clientY);
   if (!hex) return;
   cell.color = hex;
   renderCells();
   showToast(hex, hex);
 }
 
-/* Map the center of a displayed cell back to a source pixel of the video,
+/* Map a tapped screen point back to a source pixel of the video,
  * accounting for object-fit: cover cropping. */
-function samplePixel(node) {
+function samplePixel(clientX, clientY) {
   const vW = video.videoWidth, vH = video.videoHeight;
   if (!vW || !vH) { showToast("Camera not ready"); return null; }
 
   const vrect = video.getBoundingClientRect();
-  const crect = node.getBoundingClientRect();
-  const cx = crect.left + crect.width / 2;
-  const cy = crect.top + crect.height / 2;
+  const cx = clientX;
+  const cy = clientY;
 
   const scale = Math.max(vrect.width / vW, vrect.height / vH);
   const dispW = vW * scale, dispH = vH * scale;
@@ -260,6 +275,7 @@ function init() {
   el("select-btn").addEventListener("click", toggleSelect);
   el("options-btn").addEventListener("click", () => show("screen-options"));
   el("flip-btn").addEventListener("click", flipCamera);
+  el("enable-cam").addEventListener("click", startCamera);
 
   el("opt-collect").addEventListener("click", () => show("screen-camera"));
   el("opt-back").addEventListener("click", () => show("screen-camera"));
