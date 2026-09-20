@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <title>Eyedrop</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ===== Camera / Collect ===== -->
+      <section id="screen-camera" class="screen active">
+        <div class="app-title">dropalete</div>
+        <div class="stage">
+          <video id="video" playsinline autoplay muted></video>
+          <div id="grid" class="grid"></div>
+          <div id="toast"></div>
+        </div>
+        <div class="controls">
+          <button id="collect-btn" class="btn primary count" data-count="0" disabled>Collect</button>
+          <div class="row">
+            <button id="select-btn" class="btn">Select</button>
+            <button id="options-btn" class="btn">Options</button>
+            <button id="flip-btn" class="btn">Flip</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Options ===== -->
+      <section id="screen-options" class="screen">
+        <div class="screen-head">Options</div>
+        <div class="list">
+          <button id="opt-collect" class="list-item">Collect</button>
+          <button id="opt-reflect" class="list-item">Reflect</button>
+          <button id="opt-share" class="list-item">Share</button>
+        </div>
+        <div class="controls">
+          <button id="opt-back" class="btn primary">Collect</button>
+        </div>
+      </section>
+
+      <!-- ===== Reflect (collections list) ===== -->
+      <section id="screen-reflect" class="screen">
+        <div class="screen-head">Reflect</div>
+        <div id="reflect-list" class="list"></div>
+        <div class="controls">
+          <button id="reflect-options" class="btn primary">Options</button>
+          <button id="reflect-collect" class="btn primary">Collect</button>
+        </div>
+      </section>
+
+      <!-- ===== Collection detail ===== -->
+      <section id="screen-collection" class="screen">
+        <div id="collection-title" class="screen-head">Collection</div>
+        <div id="collection-swatches" class="swatches"></div>
+        <div class="controls">
+          <button id="share-current" class="btn primary">Share</button>
+          <button id="collection-back" class="btn primary">Back</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
